@@ -1,0 +1,23 @@
+.gradle/
+**/build/
+.idea/
+*.iml
+local.properties
+*.apk
+*.aab
+*.keystore
+*.jks
+.DS_Store
+# Sensitive local diagnostic exports and cloud credentials
+logs/
+diagnostics/
+*.log
+*.jsonl
+credentials.json
+client_secret*.json
+service-account*.json
+*.p12
+*.pem
+*.key
+.env
+.env.*
