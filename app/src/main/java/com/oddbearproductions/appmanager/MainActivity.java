@@ -443,11 +443,13 @@ public final class MainActivity extends Activity {
         super.onActivityResult(request,result,data);
         if ((request==PICK_FOLDER||request==PICK_LOG_FOLDER||request==PICK_ICON_FOLDER)&&result==RESULT_OK&&data!=null) {
             Uri tree=data.getData();if(tree==null)return;
-            int flags=data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            final int requiredFlags=Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+            final int grantedFlags=data.getFlags();
             try {
-                getContentResolver().takePersistableUriPermission(tree,flags);
-                if ((flags & Intent.FLAG_GRANT_WRITE_URI_PERMISSION)==0)
-                    throw new SecurityException("Selected provider is read-only");
+                if ((grantedFlags & requiredFlags)!=requiredFlags)
+                    throw new SecurityException("Selected provider requires read and write access");
+                getContentResolver().takePersistableUriPermission(tree,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 ApkRepository.setTree(this,request==PICK_FOLDER?"apks_tree":request==PICK_ICON_FOLDER?"icons_tree":"logs_tree",tree);
                 if(request==PICK_LOG_FOLDER)FailureLogSync.flushAsync(this);
                 if(request==PICK_FOLDER && !pendingImports.isEmpty()) importOrChooseFolder();
