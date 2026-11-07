@@ -15,12 +15,19 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
-      - name: Install Android SDK 35
-        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      # Ubuntu GitHub runners already include Android cmdline-tools. The
+      # setup-android action invokes 'sdkmanager tools' (removed from the SDK
+      # repository) and failed before Gradle could run in build #42354215333.
+      - name: Verify Android SDK and install API 35
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "ANDROID_HOME=${ANDROID_HOME:-unset}"
+          command -v sdkmanager
+          sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
       - name: Build, test and lint
         run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
       - name: Upload test APK
