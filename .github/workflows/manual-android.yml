@@ -26,8 +26,13 @@ jobs:
         run: |
           set -euo pipefail
           echo "ANDROID_HOME=${ANDROID_HOME:-unset}"
-          command -v sdkmanager
-          sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)"
+          if [[ -z "$SDKMANAGER" ]]; then
+            echo "::error::Android SDK command-line tools not found under $ANDROID_HOME/cmdline-tools"
+            exit 1
+          fi
+          echo "Using $SDKMANAGER"
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
       - name: Build, test and lint
         run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
       - name: Upload test APK
