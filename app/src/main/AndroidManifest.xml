@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Private testing utility: package visibility is needed to compare installed app versions. -->
-    <!-- Required for locally discovering OBP apps with unknown package IDs.\n         Personal/internal utility only; not approved for Play Store distribution. -->\n    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"\n        tools:ignore="QueryAllPackagesPermission" />
+    <!-- Required for locally discovering OBP apps with unknown package IDs.
+         Personal/internal utility only; not approved for Play Store distribution. -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
