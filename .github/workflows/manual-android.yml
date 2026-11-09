@@ -41,7 +41,7 @@ jobs:
         with:
           name: AppManager-OBP-M1-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 14
+          retention-days: 7
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -51,4 +51,4 @@ jobs:
             app/build/reports/tests/
             app/build/reports/lint-results-debug.html
           if-no-files-found: ignore
-          retention-days: 14
+          retention-days: 3
